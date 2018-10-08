@@ -1,0 +1,41 @@
+
+.clock-timer {
+	float: right;
+  min-width: 140px;
+  
+}
+.clock-timer i {
+	margin-right: 10px;
+}
+
+.min-clock, 
+.sec-clock {
+  position: relative;
+  background: #555;
+  padding: 8px;
+  box-shadow: 0 0 2px 2px #d2d2d2;
+  min-width: 60px;
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 24px;
+}
+.overed {
+  position: absolute;
+  height: 28px;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.4;
+  display: inline-block;
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+.clock-timer .fa-clock-o.fa {
+	color: #444;
+}
+.clock-seprator {
+    font-size: 24px;
+}
