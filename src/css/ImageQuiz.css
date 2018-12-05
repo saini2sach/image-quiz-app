@@ -102,8 +102,7 @@
 }
 
 #footer {
-  position: fixed;
-  bottom: 0;
+  margin-top: 20px;
   font-size: 14px;
 }
 
@@ -154,10 +153,6 @@
     margin: 16px 0;
   }
 
-  #footer {
-    position: static;
-    margin-top: 20px;
-  }
   .timer-comp {
     margin: 5% 0;
   }
