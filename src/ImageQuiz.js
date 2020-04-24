@@ -20,7 +20,7 @@ const getDataApi = (_self) =>{
     return item;
   };
 
-  fetch('https://api.myjson.com/bins/zym9w')
+  fetch('https://demo6817798.mockable.io/getImageQuizAppData')
     .then( (response) => response.json())
     .then((data) => {
       let listOfItem = [],
