@@ -7,6 +7,11 @@ import '../css/loader.css';
 
 function MainContent(props) {
     const imageReady = props.imageUrl && props.imageLoaded;
+    // Freeze the clock whenever the question isn't actively answerable:
+    // while the image is loading, and during the post-answer feedback /
+    // auto-advance window (showContinueBtn). So the timer only counts
+    // real thinking time.
+    const timerPaused = !imageReady || props.showContinueBtn;
     return (
         <div className="col-10 offset-1 main-content clearfix">
             <div className="col-lg-4 float-left item-image">
@@ -28,7 +33,7 @@ function MainContent(props) {
                 { !imageReady && <div className="loader"></div> }
             </div>
             <div className="float-left col-lg-2 timer-comp">
-                <Timer totalSecs={props.timerLimit} showResult={props.showResult} paused={!imageReady}/>
+                <Timer totalSecs={props.timerLimit} showResult={props.showResult} paused={timerPaused}/>
             </div>
             { imageReady
                 ? <div className="col-lg-5 float-right item-options">

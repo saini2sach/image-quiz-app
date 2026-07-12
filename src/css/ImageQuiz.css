@@ -132,9 +132,93 @@
   to   { transform: scaleX(1); }
 }
 
-#footer {
-  margin-top: 20px;
-  font-size: 14px;
+/* ---- Start / landing screen ---- */
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 32px;
+}
+
+.start-heading {
+  width: 100%;
+  text-align: center;
+  color: #3d6673;
+  margin-bottom: 16px;
+}
+
+.start-rules {
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 auto 24px;
+}
+
+.start-rules li {
+  margin-bottom: 8px;
+}
+
+.start-time-label {
+  text-align: center;
+  font-weight: bold;
+  color: #3d6673;
+  margin-bottom: 12px;
+}
+
+.time-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.time-chip {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 2px solid #6b929e;
+  background-color: #fff;
+  color: #3d6673;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.time-chip:hover {
+  background-color: #a8bbc1;
+}
+
+.time-chip-active {
+  background-color: #6b929e;
+  color: #fff;
+  border-color: #3d6673;
+}
+
+.start-game-btn {
+  margin-top: 8px;
+}
+
+/* Muted, outlined secondary action so it doesn't compete with Continue */
+.end-quiz-wrapper {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.end-quiz-btn {
+  padding: 8px 18px;
+  background-color: transparent;
+  color: #3d6673;
+  border: 2px solid #6b929e;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.end-quiz-btn:hover {
+  background-color: #6b929e;
+  color: #fff;
 }
 
 .green {

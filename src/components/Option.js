@@ -4,22 +4,22 @@ import React from 'react';
 const Option = (props) => {
     const handleClick = (event, item) => {
         const obj = event.target;
-        let isAnswerCorrect = false;
-        if(item === props.answer) {
-            obj.classList.add('green');
-            isAnswerCorrect = true;
-        }
-        else {
-            obj.classList.add('red');
-        }
+        const isAnswerCorrect = (item === props.answer);
+        obj.classList.add(isAnswerCorrect ? 'green' : 'red');
+
         const allOptionsObj = document.querySelectorAll('.item-options .option');
         for(var itemObj of allOptionsObj) {
             itemObj.disabled = true;
+            // Always reveal the correct option in green so the user learns
+            // the right answer even after picking a wrong one.
+            if(itemObj.dataset.answer === props.answer) {
+                itemObj.classList.add('green');
+            }
         }
         props.enableContinueBtn(isAnswerCorrect);
     }
     return (
-        <button className="option" onClick={(event) => handleClick(event, props.item)}>
+        <button className="option" data-answer={props.item} onClick={(event) => handleClick(event, props.item)}>
             {props.item.replace(/_/g, " ")}
         </button>
     )

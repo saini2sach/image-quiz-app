@@ -6,7 +6,7 @@ import './css/bootstrap-min.css';
 import MainContent from './components/MainContent';
 import Hero from './components/Hero';
 import Continue from './components/Continue';
-import Footer from './components/Footer';
+import StartScreen from './components/StartScreen';
 import DisplayResult from './components/DisplayResult';
 import PlayAgain from './components/PlayAgain';
 
@@ -53,11 +53,13 @@ class ImageQuiz extends Component {
   constructor(props) {
     super(props);
     this.autoAdvanceTimer = null;
-    this.autoAdvanceMs = 1000;
+    this.autoAdvanceMs = 1500;
     this.enableContinueBtn = this.enableContinueBtn.bind(this);
     this.newPuzzle = this.newPuzzle.bind(this);
     this.showResult = this.showResult.bind(this);
     this.handleImageLoad = this.handleImageLoad.bind(this);
+    this.startGame = this.startGame.bind(this);
+    this.endQuiz = this.endQuiz.bind(this);
   }
 
   static initialState = () => ({
@@ -69,7 +71,8 @@ class ImageQuiz extends Component {
     timerLimit: 60,
     isTimerReached: false,
     oneQuesAttemptTime: 5,
-    imageLoaded: false
+    imageLoaded: false,
+    gameStarted: false
   })
 
   state = ImageQuiz.initialState();
@@ -84,10 +87,16 @@ class ImageQuiz extends Component {
     })
   }
 
-  resetQuiz = () => {
+  startGame = (selectedTime) => {
     var _self = this;
-    this.setState(ImageQuiz.initialState());
+    // Lock in the chosen duration and load the first puzzle.
+    this.setState({ gameStarted: true, timerLimit: selectedTime });
     getDataApi(_self);
+  }
+
+  resetQuiz = () => {
+    // Back to the landing screen so the player can re-pick a time.
+    this.setState(ImageQuiz.initialState());
   }
 
   newPuzzle = () => {
@@ -111,6 +120,13 @@ class ImageQuiz extends Component {
     this.setState({ imageLoaded: true });
   }
 
+  endQuiz = () => {
+    // Confirm before ending so an accidental click can't lose progress.
+    if (window.confirm('End the quiz and see your results?')) {
+      this.showResult();
+    }
+  }
+
   enableContinueBtn = (isAnswerCorrect) => {
     this.setState( (prevState) => ({
       showContinueBtn: true,
@@ -122,43 +138,44 @@ class ImageQuiz extends Component {
     this.autoAdvanceTimer = setTimeout(this.newPuzzle, this.autoAdvanceMs);
   }
 
-  componentDidMount() {
-    var _self = this;
-    getDataApi(_self);
-  }
-
   componentWillUnmount() {
     clearTimeout(this.autoAdvanceTimer);
   }
 
   render() {
-    let {imageUrl, correctAnswer, setOfAnswer, showContinueBtn, timerLimit, savedResult, oneQuesAttemptTime, imageLoaded} = this.state;
+    let {imageUrl, correctAnswer, setOfAnswer, showContinueBtn, timerLimit, savedResult, oneQuesAttemptTime, imageLoaded, gameStarted} = this.state;
     return (
       <div className="container-fluid">
         <Hero />
-        { !this.state.isTimerReached
-          ? <MainContent
-              imageUrl={imageUrl}
-              correctAnswer= {correctAnswer}
-              setOfAnswer={setOfAnswer}
-              showContinueBtn={showContinueBtn}
-              enableContinueBtn={this.enableContinueBtn}
-              timerLimit={timerLimit}
-              showResult={this.showResult}
-              imageLoaded={imageLoaded}
-              onImageLoad={this.handleImageLoad}
-            />
-          : <div>
-              <DisplayResult 
-                resultList={savedResult}
+        { !gameStarted
+          ? <StartScreen onStart={this.startGame} />
+          : !this.state.isTimerReached
+            ? <MainContent
+                imageUrl={imageUrl}
+                correctAnswer= {correctAnswer}
+                setOfAnswer={setOfAnswer}
+                showContinueBtn={showContinueBtn}
+                enableContinueBtn={this.enableContinueBtn}
                 timerLimit={timerLimit}
-                oneQuesAttemptTime={oneQuesAttemptTime}
+                showResult={this.showResult}
+                imageLoaded={imageLoaded}
+                onImageLoad={this.handleImageLoad}
               />
-              <PlayAgain resetQuiz={this.resetQuiz}/>
-            </div>
-        }        
-        { showContinueBtn && <Continue newPuzzle={this.newPuzzle} autoAdvanceMs={this.autoAdvanceMs}/>}
-        <Footer />
+            : <div>
+                <DisplayResult
+                  resultList={savedResult}
+                  timerLimit={timerLimit}
+                  oneQuesAttemptTime={oneQuesAttemptTime}
+                />
+                <PlayAgain resetQuiz={this.resetQuiz}/>
+              </div>
+        }
+        { gameStarted && showContinueBtn && <Continue newPuzzle={this.newPuzzle} autoAdvanceMs={this.autoAdvanceMs}/>}
+        { gameStarted && !this.state.isTimerReached &&
+          <div className="end-quiz-wrapper">
+            <button className="end-quiz-btn" onClick={this.endQuiz}>End Quiz</button>
+          </div>
+        }
       </div>
     )
   }
